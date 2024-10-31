@@ -101,6 +101,8 @@ def process_files(uploaded_files):
 
         company_name = normalize_text(company_name)
         st.write(f"Normalized company name: '{company_name}'")
+        
+        month_before_settlement = 3
 
         # Determine header and data start rows based on company_name
         # (Same logic as your original script)
