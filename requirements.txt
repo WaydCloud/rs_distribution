@@ -1,0 +1,15 @@
+pandas
+gspread
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+oauth2client
+tk
+openpyxl
+pyinstaller
+jinja2
+xlrd
+tkfilebrowser
+pyxlsb
+streamlit
