@@ -68,7 +68,7 @@ def mapping(name, map_dict):
             return key
     return name
 
-def read_excel_file(uploaded_file, header=None, sheet_name=None):
+def read_excel_file(uploaded_file, header=None, sheet_name=0):
     if uploaded_file.name.endswith('.xls'):
         return pd.read_csv(uploaded_file, delimiter='\t', encoding='cp949')
     else:
