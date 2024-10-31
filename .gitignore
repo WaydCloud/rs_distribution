@@ -1,0 +1,28 @@
+# Python 가상환경
+venv/
+.env
+__pycache__/
+*.pyc
+
+# 시스템 파일
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log
+
+# 특정 파일 무시
+app.log
+distribution_processor.py
+rs_ent_contact.json
+
+# 특정 CSV 파일 무시 (UTF-8 인코딩된 한글 파일명 예시)
+"\354\235\214\354\233\220_\354\240\225\354\202\260\353\202\264\354\227\255.csv"
+"음원_정산내역.csv"
+
+# 빌드 결과물 (예: Node.js)
+node_modules/
+
+# IDE 설정 파일
+.vscode/
+.idea/

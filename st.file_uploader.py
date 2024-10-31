@@ -53,7 +53,10 @@ def extract_spreadsheet_id(url):
 
 def get_google_credentials():
     credentials_dict = st.secrets["gcp"]
-    credentials = Credentials.from_service_account_info(credentials_dict)
+    credentials = Credentials.from_service_account_info(
+        credentials_dict,
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
     return credentials
 
 def normalize_text(text):
