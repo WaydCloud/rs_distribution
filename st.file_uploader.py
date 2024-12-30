@@ -106,12 +106,19 @@ def process_files(uploaded_files):
         st.write(f"Normalized company name: '{company_name}'")
         
         month_before_settlement = 3
+        company_name_for_mapping = company_name
 
         # Determine header and data start rows based on company_name
         # (Same logic as your original script)
         if company_name == '라인엠컴퍼니':
-            header_row = 12
-            data_start_row = 12
+            cutoff_date = datetime(2024, 12, 1)
+            if settlement_date >= cutoff_date:
+                header_row = 12
+                data_start_row = 12
+            else:
+                header_row = 10
+                data_start_row = 10
+                company_name_for_mapping = '라인엠컴퍼니2'
         elif company_name == "뮤직앤뉴":
             month_before_settlement = 1
             header_row = 0
@@ -145,6 +152,16 @@ def process_files(uploaded_files):
         # Define column mappings
         column_mapping = {
             '라인엠컴퍼니': {
+                '아티스트명': '아티스트',
+                '앨범명': '앨범명',
+                '곡명': '곡명',
+                '플랫폼': '서비스사',
+                '서비스구분': '서비스종류',
+                '판매횟수': 'HIT-s',
+                '매출': '매출',
+                '정산금': '아티스트정산금'
+            },
+            '라인엠컴퍼니2': {
                 '아티스트명': '아티스트명',
                 '앨범명': '앨범명',
                 '곡명': '곡명',
@@ -197,23 +214,23 @@ def process_files(uploaded_files):
             new_row['정산월'] = settlement_month
             new_row['판매월'] = sale_month
             new_row['유통사'] = company_name
-            new_row['아티스트명'] = mapping(row[column_mapping[company_name]['아티스트명']], artist_mapping)
-            new_row['앨범명'] = row[column_mapping[company_name]['앨범명']]
-            new_row['곡명'] = row[column_mapping[company_name]['곡명']]
+            new_row['아티스트명'] = mapping(row[column_mapping[company_name_for_mapping]['아티스트명']], artist_mapping)
+            new_row['앨범명'] = row[column_mapping[company_name_for_mapping]['앨범명']]
+            new_row['곡명'] = row[column_mapping[company_name_for_mapping]['곡명']]
 
             try:
-                new_row['플랫폼'] = mapping(row[column_mapping[company_name]['플랫폼']], platform_mapping)
+                new_row['플랫폼'] = mapping(row[column_mapping[company_name_for_mapping]['플랫폼']], platform_mapping)
             except:
                 new_row['플랫폼'] = ''
 
             try:
-                new_row['서비스구분'] = row[column_mapping[company_name]['서비스구분']]
+                new_row['서비스구분'] = row[column_mapping[company_name_for_mapping]['서비스구분']]
             except:
                 new_row['서비스구분'] = ''
 
             for col in ['판매횟수', '매출', '정산금']:
-                if column_mapping[company_name].get(col):
-                    mapping_value = column_mapping[company_name].get(col)
+                if column_mapping[company_name_for_mapping].get(col):
+                    mapping_value = column_mapping[company_name_for_mapping].get(col)
                     if isinstance(mapping_value, list):
                         new_row[col] = sum([row[val] for val in mapping_value if val in row and pd.notna(row[val])])
                     else:
