@@ -115,10 +115,10 @@ def process_files(uploaded_files):
             if settlement_date >= cutoff_date:
                 header_row = 12
                 data_start_row = 12
+                company_name_for_mapping = '라인엠컴퍼니2'
             else:
                 header_row = 10
                 data_start_row = 10
-                company_name_for_mapping = '라인엠컴퍼니2'
         elif company_name == "뮤직앤뉴":
             month_before_settlement = 1
             header_row = 0
