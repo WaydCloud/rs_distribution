@@ -110,8 +110,8 @@ def process_files(uploaded_files):
         # Determine header and data start rows based on company_name
         # (Same logic as your original script)
         if company_name == '라인엠컴퍼니':
-            header_row = 10
-            data_start_row = 10
+            header_row = 12
+            data_start_row = 12
         elif company_name == "뮤직앤뉴":
             month_before_settlement = 1
             header_row = 0
@@ -145,14 +145,14 @@ def process_files(uploaded_files):
         # Define column mappings
         column_mapping = {
             '라인엠컴퍼니': {
-                '아티스트명': '아티스트',
+                '아티스트명': '아티스트명',
                 '앨범명': '앨범명',
                 '곡명': '곡명',
-                '플랫폼': '서비스사',
-                '서비스구분': '서비스종류',
-                '판매횟수': 'HIT-s',
-                '매출': '매출',
-                '정산금': '아티스트정산금'
+                '플랫폼': '정산처',
+                '서비스구분': '서비스명',
+                '판매횟수': '카운트',
+                '매출': '정산',
+                '정산금': '계약자정산'
             },
             '뮤직앤뉴': {
                 '아티스트명': '아티스트',
