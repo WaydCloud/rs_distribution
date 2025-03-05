@@ -70,7 +70,13 @@ def mapping(name, map_dict):
 
 def read_excel_file(uploaded_file, header=None, sheet_name=0):
     if uploaded_file.name.endswith('.xls'):
-        return pd.read_csv(uploaded_file, delimiter='\t', encoding='cp949')
+        if '미러볼뮤직' in uploaded_file.name:
+            dfs = pd.read_html(uploaded_file, encoding='utf-8', header=0)
+            df = dfs[0]
+            df = df.iloc[:-2]
+            return df
+        else:
+            return pd.read_csv(uploaded_file, delimiter='\t', encoding='cp949')
     else:
         return pd.read_excel(uploaded_file, sheet_name=sheet_name, header=header)
 
@@ -129,9 +135,17 @@ def process_files(uploaded_files):
             header_row = 3
             data_start_row = 3
         elif company_name == "미러볼뮤직":
-            month_before_settlement = 1
-            header_row = 0
-            data_start_row = 0
+            cutoff_date = datetime(2025, 2, 1)
+            if settlement_date >= cutoff_date:
+                month_before_settlement = 1
+                header_row = 0
+                data_start_row = 0
+                company_name_for_mapping = '미러볼뮤직2'
+            else:
+                month_before_settlement = 1
+                header_row = 0
+                data_start_row = 0
+            
         else:
             st.error(f"지원하지 않는 유통사입니다. {company_name}")
             continue
@@ -148,6 +162,7 @@ def process_files(uploaded_files):
             df = read_excel_file(uploaded_file, header=header_row)
 
         df = df.iloc[(data_start_row - header_row):].reset_index(drop=True)
+        print(df)
 
         # Define column mappings
         column_mapping = {
@@ -199,6 +214,16 @@ def process_files(uploaded_files):
                 '서비스구분': '',
                 '판매횟수': '',
                 '매출': '합계금액',
+                '정산금': '정산금액'
+            },
+            '미러볼뮤직2': {
+                '아티스트명': '아티스트',
+                '앨범명': '앨범명',
+                '곡명': '곡명',
+                '플랫폼': '사이트',
+                '서비스구분': '판매사서비스명',
+                '판매횟수': '히트수',
+                '매출': '인접권료',
                 '정산금': '정산금액'
             }
         }
@@ -301,9 +326,9 @@ def append_to_google_sheets(final_df, spreadsheet_link, sheet_name):
 
 st.title("정산 데이터 처리 및 Google Sheets 업로드")
 
-uploaded_files = st.file_uploader("엑셀 파일을 업로드하세요", type=["xls", "xlsx"], accept_multiple_files=True)
+uploaded_files = st.file_uploader("엑셀 파일을 업로드하세요", type=["xls", "xlsx", "tsv"], accept_multiple_files=True)
 
-spreadsheet_link = st.text_input("Google Sheets URL을 입력하세요")
+spreadsheet_link = st.text_input("Google Sheets URL을 입력하세요", value="https://docs.google.com/spreadsheets/d/1WRs1AmmkeMjDDoQhWegFevFIJs0oJ6sgax-s_zvLy-Y/edit?gid=680247342#gid=680247342")
 sheet_name = st.text_input("Sheet 이름을 입력하세요", value="음원_정산내역(전체데이터)")
 
 if st.button("처리 및 업로드 시작"):

@@ -13,3 +13,4 @@ xlrd
 tkfilebrowser
 pyxlsb
 streamlit
+lxml
